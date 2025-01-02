@@ -8,40 +8,48 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Propojení Bricks Builder formulářů s webhooky. Umožňuje snadné nastavení webhooku pro jakýkoliv Bricks formulář.
+Send Bricks Builder form submissions to any webhook URL. Perfect for integrations with Make.com, Zapier, or any other webhook service.
 
 == Description ==
 
-Plugin umožňuje propojit formuláře z Bricks Builderu s jakýmkoliv webhookem. Ideální pro integraci s:
+This plugin allows you to connect your Bricks Builder forms with any webhook service. Ideal for integration with:
 
 * Make.com
 * Zapier
 * Pabbly Connect
-* a dalšími službami podporujícími webhooky
+* Any other service supporting webhooks
 
 == Installation ==
 
-1. Nahrajte plugin přes WordPress rozhraní nebo jej rozbalte do složky `/wp-content/plugins/`
-2. Aktivujte plugin
-3. Jděte do Nastavení > Bricks Form 2 Webhook
-4. Zadejte URL webhooku a ID formuláře
+1. Upload the plugin through WordPress or extract to `/wp-content/plugins/`
+2. Activate the plugin
+3. Go to Settings > Bricks Form 2 Webhook
+4. Enter your webhook URL and form ID
 
 == Frequently Asked Questions ==
 
-= Jak zjistím ID formuláře? =
+= How do I find my form ID? =
 
-ID formuláře najdete v Bricks Builderu v CSS ID formuláře. Například pokud je CSS ID "bricks-element-fszxsr", tak ID formuláře je "fszxsr".
+You can find your form ID in Bricks Builder in the form's CSS ID. For example, if the CSS ID is "bricks-element-fszxsr", then the form ID is "fszxsr".
 
-= Funguje to s jakýmkoliv webhookem? =
+= Does it work with any webhook? =
 
-Ano, plugin funguje s jakýmkoliv webhookem, který přijímá POST požadavky s JSON daty.
+Yes, the plugin works with any webhook that accepts POST requests with JSON data.
 
 == Changelog ==
 
-= 1.0.0 =
-* První vydání pluginu
+= 1.0.1 =
+Changes:
+- Updated Author URI to official website
+- Minor documentation improvements
+
+This is a maintenance release that updates the plugin's author information.
 
 == Upgrade Notice ==
 
-= 1.0.0 =
-První vydání pluginu
+= 1.0.1 =
+Changes:
+- Updated Author URI to official website
+- Minor documentation improvements
+
+This is a maintenance release that updates the plugin's author information.
