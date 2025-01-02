@@ -1,0 +1,14 @@
+/* assets/css/admin.css */
+.wrap {
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.form-table th {
+    width: 200px;
+}
+
+.description {
+    margin-top: 5px;
+    color: #666;
+}
