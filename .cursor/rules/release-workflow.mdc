@@ -1,5 +1,58 @@
 ---
-description:
-globs:
+description: 
+globs: 
 alwaysApply: false
 ---
+# Workflow for Releasing a New Version of "Bricks Form 2 Webhook" Plugin
+
+**Goal:** Automated creation of a GitHub Release with a correctly structured ZIP archive of the plugin via GitHub Actions after pushing a new Git tag.
+
+**Developer Steps:**
+
+1.  **Development & Code Changes:**
+    *   Implement all necessary features, fixes, and improvements in the plugin code.
+
+2.  **Update Version Numbers (e.g., to `vX.Y.Z`):**
+    *   **`bricks-form-2-webhook.php`:**
+        *   In the header comment: `* Version: X.Y.Z`
+        *   In the constant definition: `define( 'BF2W_VERSION', 'X.Y.Z' );`
+    *   **`readme.txt`:**
+        *   `Stable tag: X.Y.Z`
+        *   Add a new entry to the `== Changelog ==` section for version `X.Y.Z`.
+
+3.  **Git Commit & Push Code Changes:**
+    *   Add all modified files to the staging area:
+        ```bash
+        git add bricks-form-2-webhook.php readme.txt # or other files, or git add .
+        ```
+    *   Create a commit with a descriptive message:
+        ```bash
+        git commit -m "feat: Description of changes in version X.Y.Z (vX.Y.Z)" 
+        ```
+    *   Push the commits to GitHub:
+        ```bash
+        git push
+        ```
+
+4.  **Create and Push New Git Tag:**
+    *   Create a local tag corresponding to the new version (the 'v' prefix is important):
+        ```bash
+        git tag vX.Y.Z 
+        # (e.g., git tag v1.3.0)
+        ```
+    *   Push all local tags to GitHub. This step triggers the GitHub Action defined in `@.github/workflows/release.yml`:
+        ```bash
+        git push --tags
+        ```
+
+5.  **Automated GitHub Action (defined in `@.github/workflows/release.yml`):**
+    *   Automatically runs after a new tag matching the `v*.*.*` pattern is pushed.
+    *   The action builds the installable ZIP archive (`bricks-form-2-webhook.zip`) with the correct internal directory structure (`bricks-form-2-webhook/[plugin_files]`).
+    *   Creates a new GitHub Release titled "Release vX.Y.Z".
+    *   Attaches the generated ZIP archive as an asset to this release.
+    *   The action's progress can be monitored on GitHub in your repository's "Actions" tab.
+
+**Reference Files:**
+*   GitHub Action Definition: `@.github/workflows/release.yml`
+*   Main Plugin File: `@bricks-form-2-webhook.php`
+*   Plugin Readme: `@readme.txt`
