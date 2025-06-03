@@ -3,7 +3,7 @@
  * Plugin Name: Bricks Form 2 Webhook
  * Plugin URI: https://github.com/paveltajdus/bricks-form-2-webhook
  * Description: Sends Bricks Builder form submissions to any webhook URL using WordPress Custom Form Action.
- * Version: 1.2.5
+ * Version: 1.2.6
  * Author: Pavel Tajdus
  * Author URI: https://www.tajdus.cz
  * Text Domain: bricks-form-2-webhook
@@ -18,7 +18,7 @@ try {
     if (defined('WP_CONTENT_DIR')) { // Check if basic WP constants are available
         $log_file_path = WP_CONTENT_DIR . '/../bf2w-debug.log'; // Attempt to place it one level up from wp-content if wp_upload_dir is not safe yet
         if (is_writable(dirname($log_file_path))) {
-            $message_to_log = gmdate('Y-m-d H:i:s') . " UTC - EARLY LOG: Plugin file " . __FILE__ . " loaded. Basename: " . plugin_basename(__FILE__) . PHP_EOL;
+            $message_to_log = gmdate('Y-m-d H:i:s') . " UTC - EARLY LOG (v1.2.6): Plugin file " . __FILE__ . " loaded. Basename: " . plugin_basename(__FILE__) . PHP_EOL;
             file_put_contents($log_file_path, $message_to_log, FILE_APPEND | LOCK_EX);
         } else {
             // Fallback if a common log path isn't writable, try error_log if configured
