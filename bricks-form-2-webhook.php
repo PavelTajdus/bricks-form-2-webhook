@@ -3,7 +3,7 @@
  * Plugin Name: Bricks Form 2 Webhook
  * Plugin URI: https://github.com/paveltajdus/bricks-form-2-webhook
  * Description: Sends Bricks Builder form submissions to any webhook URL using WordPress Custom Form Action.
- * Version: 1.1.1
+ * Version: 1.2.0
  * Author: Pavel Tajdus
  * Author URI: https://www.tajdus.cz
  * Text Domain: bricks-form-2-webhook
@@ -18,11 +18,16 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Add settings page - do Settings menu (jako funkční verze)
+// Load plugin textdomain
+add_action('plugins_loaded', function() {
+    load_plugin_textdomain('bricks-form-2-webhook', false, dirname(plugin_basename(__FILE__)) . '/languages');
+});
+
+// Add settings page - do Settings menu
 add_action('admin_menu', function() {
     add_options_page(
-        'Bricks Form 2 Webhook',
-        'Bricks Form 2 Webhook',
+        __('Bricks Form 2 Webhook', 'bricks-form-2-webhook'),
+        __('Bricks Form 2 Webhook', 'bricks-form-2-webhook'),
         'manage_options',
         'bricks-form-2-webhook',
         'bf2w_settings_page'
@@ -50,8 +55,8 @@ add_action('admin_enqueue_scripts', function($hook) {
     if ('settings_page_bricks-form-2-webhook' !== $hook) {
         return;
     }
-    wp_enqueue_style('bf2w-admin', plugin_dir_url(__FILE__) . 'assets/css/admin.css', array(), '1.1.0');
-    wp_enqueue_script('bf2w-admin', plugin_dir_url(__FILE__) . 'assets/js/admin.js', array('jquery'), '1.1.0', true);
+    wp_enqueue_style('bf2w-admin', plugin_dir_url(__FILE__) . 'assets/css/admin.css', array(), '1.2.0');
+    wp_enqueue_script('bf2w-admin', plugin_dir_url(__FILE__) . 'assets/js/admin.js', array('jquery'), '1.2.0', true);
 });
 
 // Settings page
@@ -71,15 +76,15 @@ function bf2w_settings_page() {
     }
     ?>
     <div class="wrap">
-        <h1>🔗 Bricks Form 2 Webhook</h1>
+        <h1>🔗 <?php _e('Bricks Form 2 Webhook', 'bricks-form-2-webhook'); ?></h1>
         
         <div class="notice notice-warning">
-            <p><strong>Důležité:</strong> Nezapomeňte nastavit "Custom" akci ve vašem Bricks formuláři!</p>
+            <p><strong><?php _e('Důležité:', 'bricks-form-2-webhook'); ?></strong> <?php _e('Nezapomeňte nastavit "Custom" akci ve vašem Bricks formuláři!', 'bricks-form-2-webhook'); ?></p>
         </div>
         
         <!-- Add/Edit Form -->
         <div class="bf2w-card">
-            <h2><?php echo $editing_webhook ? 'Upravit Webhook' : 'Přidat Nový Webhook'; ?></h2>
+            <h2><?php echo $editing_webhook ? __('Upravit Webhook', 'bricks-form-2-webhook') : __('Přidat Nový Webhook', 'bricks-form-2-webhook'); ?></h2>
             
             <form method="post">
                 <?php wp_nonce_field('bf2w_action', 'bf2w_nonce'); ?>
@@ -90,39 +95,39 @@ function bf2w_settings_page() {
                 
                 <table class="form-table">
                     <tr>
-                        <th scope="row">Form ID <span style="color: red;">*</span></th>
+                        <th scope="row"><?php _e('Form ID', 'bricks-form-2-webhook'); ?> <span style="color: red;">*</span></th>
                         <td>
                             <input type="text" name="form_id" value="<?php echo $editing_webhook ? esc_attr($editing_webhook['form_id']) : ''; ?>" class="regular-text" required>
-                            <p class="description">ID formuláře (např. fszxsr bez prefixu bricks-element-)</p>
+                            <p class="description"><?php _e('ID formuláře (např. fszxsr bez prefixu bricks-element-)', 'bricks-form-2-webhook'); ?></p>
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row">Webhook URL <span style="color: red;">*</span></th>
+                        <th scope="row"><?php _e('Webhook URL', 'bricks-form-2-webhook'); ?> <span style="color: red;">*</span></th>
                         <td>
                             <input type="url" name="webhook_url" value="<?php echo $editing_webhook ? esc_attr($editing_webhook['webhook_url']) : ''; ?>" class="regular-text" required>
-                            <p class="description">URL kam se odešlou data z formuláře</p>
+                            <p class="description"><?php _e('URL kam se odešlou data z formuláře', 'bricks-form-2-webhook'); ?></p>
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row">Success Message</th>
+                        <th scope="row"><?php _e('Success Message', 'bricks-form-2-webhook'); ?></th>
                         <td>
-                            <input type="text" name="success_message" value="<?php echo $editing_webhook ? esc_attr($editing_webhook['success_message']) : 'Data successfully sent'; ?>" class="regular-text">
+                            <input type="text" name="success_message" value="<?php echo $editing_webhook ? esc_attr($editing_webhook['success_message']) : __('Data successfully sent', 'bricks-form-2-webhook'); ?>" class="regular-text">
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row">Error Message</th>
+                        <th scope="row"><?php _e('Error Message', 'bricks-form-2-webhook'); ?></th>
                         <td>
-                            <input type="text" name="error_message" value="<?php echo $editing_webhook ? esc_attr($editing_webhook['error_message']) : 'Error sending data'; ?>" class="regular-text">
+                            <input type="text" name="error_message" value="<?php echo $editing_webhook ? esc_attr($editing_webhook['error_message']) : __('Error sending data', 'bricks-form-2-webhook'); ?>" class="regular-text">
                         </td>
                     </tr>
                 </table>
                 
                 <p class="submit">
                     <?php if ($editing_webhook): ?>
-                        <input type="submit" class="button-primary" value="Aktualizovat Webhook">
-                        <a href="<?php echo admin_url('options-general.php?page=bricks-form-2-webhook'); ?>" class="button">Zrušit</a>
+                        <input type="submit" class="button-primary" value="<?php _e('Aktualizovat Webhook', 'bricks-form-2-webhook'); ?>">
+                        <a href="<?php echo admin_url('options-general.php?page=bricks-form-2-webhook'); ?>" class="button"><?php _e('Zrušit', 'bricks-form-2-webhook'); ?></a>
                     <?php else: ?>
-                        <input type="submit" class="button-primary" value="Přidat Webhook">
+                        <input type="submit" class="button-primary" value="<?php _e('Přidat Webhook', 'bricks-form-2-webhook'); ?>">
                     <?php endif; ?>
                 </p>
             </form>
@@ -130,33 +135,33 @@ function bf2w_settings_page() {
         
         <!-- Debug Settings -->
         <div class="bf2w-card">
-            <h2>Debug Nastavení</h2>
+            <h2><?php _e('Debug Nastavení', 'bricks-form-2-webhook'); ?></h2>
             <form method="post">
                 <?php wp_nonce_field('bf2w_action', 'bf2w_nonce'); ?>
                 <input type="hidden" name="action" value="debug">
                 <table class="form-table">
                     <tr>
-                        <th scope="row">Debug Mode</th>
+                        <th scope="row"><?php _e('Debug Mode', 'bricks-form-2-webhook'); ?></th>
                         <td>
                             <label>
                                 <input type="checkbox" name="debug_mode" value="1" <?php checked($debug_mode); ?>>
-                                Zapnout debug logging
+                                <?php _e('Zapnout debug logging', 'bricks-form-2-webhook'); ?>
                             </label>
-                            <p class="description">Loguje detaily o odesílání formulářů pro řešení problémů</p>
+                            <p class="description"><?php _e('Loguje detaily o odesílání formulářů pro řešení problémů', 'bricks-form-2-webhook'); ?></p>
                         </td>
                     </tr>
                 </table>
                 <p class="submit">
-                    <input type="submit" class="button" value="Uložit Nastavení">
+                    <input type="submit" class="button" value="<?php _e('Uložit Nastavení', 'bricks-form-2-webhook'); ?>">
                 </p>
             </form>
             
             <?php if ($debug_mode): ?>
             <div style="margin-top: 20px;">
-                <h4>Debug Log Akce</h4>
+                <h4><?php _e('Debug Log Akce', 'bricks-form-2-webhook'); ?></h4>
                 <p>
-                    <a href="<?php echo wp_nonce_url(admin_url('options-general.php?page=bricks-form-2-webhook&bf2w_download_log=1'), 'bf2w_download_log'); ?>" class="button">📥 Stáhnout Debug Log</a>
-                    <a href="<?php echo wp_nonce_url(admin_url('options-general.php?page=bricks-form-2-webhook&bf2w_clear_log=1'), 'bf2w_clear_log'); ?>" class="button" onclick="return confirm('Opravdu vymazat debug log?')">🗑️ Vymazat Debug Log</a>
+                    <a href="<?php echo wp_nonce_url(admin_url('options-general.php?page=bricks-form-2-webhook&bf2w_download_log=1'), 'bf2w_download_log'); ?>" class="button">📥 <?php _e('Stáhnout Debug Log', 'bricks-form-2-webhook'); ?></a>
+                    <a href="<?php echo wp_nonce_url(admin_url('options-general.php?page=bricks-form-2-webhook&bf2w_clear_log=1'), 'bf2w_clear_log'); ?>" class="button" onclick="return confirm('<?php _e('Opravdu vymazat debug log?', 'bricks-form-2-webhook'); ?>')">🗑️ <?php _e('Vymazat Debug Log', 'bricks-form-2-webhook'); ?></a>
                 </p>
             </div>
             <?php endif; ?>
@@ -165,15 +170,15 @@ function bf2w_settings_page() {
         <!-- Existing Webhooks -->
         <?php if (!empty($webhooks)): ?>
         <div class="bf2w-card">
-            <h2>Existující Webhooks</h2>
+            <h2><?php _e('Existující Webhooks', 'bricks-form-2-webhook'); ?></h2>
             <table class="wp-list-table widefat fixed striped">
                 <thead>
                     <tr>
-                        <th>Form ID</th>
-                        <th>Webhook URL</th>
-                        <th>Success Message</th>
-                        <th>Error Message</th>
-                        <th>Akce</th>
+                        <th><?php _e('Form ID', 'bricks-form-2-webhook'); ?></th>
+                        <th><?php _e('Webhook URL', 'bricks-form-2-webhook'); ?></th>
+                        <th><?php _e('Success Message', 'bricks-form-2-webhook'); ?></th>
+                        <th><?php _e('Error Message', 'bricks-form-2-webhook'); ?></th>
+                        <th><?php _e('Akce', 'bricks-form-2-webhook'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -184,8 +189,8 @@ function bf2w_settings_page() {
                         <td><?php echo esc_html($webhook['success_message']); ?></td>
                         <td><?php echo esc_html($webhook['error_message']); ?></td>
                         <td>
-                            <a href="<?php echo admin_url('options-general.php?page=bricks-form-2-webhook&edit=' . $index); ?>" class="button button-small">Upravit</a>
-                            <a href="<?php echo wp_nonce_url(admin_url('options-general.php?page=bricks-form-2-webhook&action=delete&webhook_id=' . $index), 'bf2w_delete'); ?>" class="button button-small button-link-delete" onclick="return confirm('Opravdu smazat?')">Smazat</a>
+                            <a href="<?php echo admin_url('options-general.php?page=bricks-form-2-webhook&edit=' . $index); ?>" class="button button-small"><?php _e('Upravit', 'bricks-form-2-webhook'); ?></a>
+                            <a href="<?php echo wp_nonce_url(admin_url('options-general.php?page=bricks-form-2-webhook&action=delete&webhook_id=' . $index), 'bf2w_delete'); ?>" class="button button-small button-link-delete" onclick="return confirm('<?php _e('Opravdu smazat?', 'bricks-form-2-webhook'); ?>')"><?php _e('Smazat', 'bricks-form-2-webhook'); ?></a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -196,13 +201,13 @@ function bf2w_settings_page() {
         
         <!-- Instructions -->
         <div class="bf2w-card">
-            <h2>Návod k použití</h2>
+            <h2><?php _e('Návod k použití', 'bricks-form-2-webhook'); ?></h2>
             <ol>
-                <li>Přidejte webhook konfiguraci výše (Form ID + Webhook URL)</li>
-                <li>Zkopírujte Form ID z Bricks formuláře (z CSS ID, např. z "bricks-element-fszxsr" použijte jen "fszxsr")</li>
-                <li>Zadejte webhook URL kam se mají data posílat</li>
-                <li>V Bricks formuláři přidejte akci a vyberte "Custom"</li>
-                <li>Uložte a otestujte formulář</li>
+                <li><?php _e('Přidejte webhook konfiguraci výše (Form ID + Webhook URL)', 'bricks-form-2-webhook'); ?></li>
+                <li><?php _e('Zkopírujte Form ID z Bricks formuláře (z CSS ID, např. z "bricks-element-fszxsr" použijte jen "fszxsr")', 'bricks-form-2-webhook'); ?></li>
+                <li><?php _e('Zadejte webhook URL kam se mají data posílat', 'bricks-form-2-webhook'); ?></li>
+                <li><?php _e('V Bricks formuláři přidejte akci a vyberte "Custom"', 'bricks-form-2-webhook'); ?></li>
+                <li><?php _e('Uložte a otestujte formulář', 'bricks-form-2-webhook'); ?></li>
             </ol>
         </div>
         
@@ -214,7 +219,7 @@ function bf2w_settings_page() {
 // Handle form actions
 function bf2w_handle_form_action() {
     if (!wp_verify_nonce($_POST['bf2w_nonce'], 'bf2w_action')) {
-        wp_die('Security check failed');
+        wp_die(esc_html__('Security check failed', 'bricks-form-2-webhook'));
     }
     
     $action = sanitize_text_field($_POST['action']);
@@ -247,7 +252,7 @@ function bf2w_add_webhook() {
     update_option('bf2w_webhooks', $webhooks);
     
     add_action('admin_notices', function() {
-        echo '<div class="notice notice-success"><p>Webhook přidán!</p></div>';
+        echo '<div class="notice notice-success"><p>' . esc_html__('Webhook přidán!', 'bricks-form-2-webhook') . '</p></div>';
     });
 }
 
@@ -267,7 +272,7 @@ function bf2w_edit_webhook() {
         update_option('bf2w_webhooks', $webhooks);
         
         add_action('admin_notices', function() {
-            echo '<div class="notice notice-success"><p>Webhook aktualizován!</p></div>';
+            echo '<div class="notice notice-success"><p>' . esc_html__('Webhook aktualizován!', 'bricks-form-2-webhook') . '</p></div>';
         });
     }
 }
@@ -278,7 +283,7 @@ function bf2w_update_debug() {
     update_option('bf2w_debug_mode', $debug_mode);
     
     add_action('admin_notices', function() use ($debug_mode) {
-        $message = $debug_mode ? 'Debug mode zapnut' : 'Debug mode vypnut';
+        $message = $debug_mode ? esc_html__('Debug mode zapnut', 'bricks-form-2-webhook') : esc_html__('Debug mode vypnut', 'bricks-form-2-webhook');
         echo '<div class="notice notice-success"><p>' . $message . '</p></div>';
     });
 }
@@ -295,9 +300,31 @@ add_action('admin_init', function() {
                 $webhooks = array_values($webhooks);
                 update_option('bf2w_webhooks', $webhooks);
                 
-                wp_redirect(admin_url('options-general.php?page=bricks-form-2-webhook&deleted=1'));
+                wp_redirect(admin_url('options-general.php?page=bricks-form-2-webhook&bf2w_message=webhook_deleted'));
                 exit;
             }
+        }
+    }
+});
+
+// Display admin notices
+add_action('admin_notices', function() {
+    if (isset($_GET['bf2w_message'])) {
+        $message_key = sanitize_key($_GET['bf2w_message']);
+        $message = '';
+        $type = 'success';
+        
+        switch ($message_key) {
+            case 'webhook_deleted':
+                $message = esc_html__('Webhook úspěšně smazán.', 'bricks-form-2-webhook');
+                break;
+            case 'log_cleared':
+                $message = esc_html__('Debug log úspěšně vymazán.', 'bricks-form-2-webhook');
+                break;
+        }
+        
+        if ($message) {
+            echo '<div class="notice notice-' . esc_attr($type) . ' is-dismissible"><p>' . $message . '</p></div>';
         }
     }
 });
@@ -328,7 +355,7 @@ function bf2w_download_debug_log() {
         readfile($log_file);
         exit;
     } else {
-        wp_die('Debug log neexistuje.');
+        wp_die(esc_html__('Debug log neexistuje.', 'bricks-form-2-webhook'));
     }
 }
 
@@ -340,11 +367,11 @@ function bf2w_clear_debug_log() {
         unlink($log_file);
     }
     
-    wp_redirect(admin_url('options-general.php?page=bricks-form-2-webhook&log_cleared=1'));
+    wp_redirect(admin_url('options-general.php?page=bricks-form-2-webhook&bf2w_message=log_cleared'));
     exit;
 }
 
-// Handle Bricks form submission (podle funkční verze!)
+// Handle Bricks form submission
 add_action('bricks/form/submit', 'bf2w_handle_form_submission', 10, 1);
 add_action('bricks/form/custom_action', 'bf2w_handle_form_submission', 10, 1);
 
@@ -358,9 +385,7 @@ function bf2w_handle_form_submission($form) {
         $data = $form->get_fields();
         bf2w_log("Got form data via get_fields(): " . json_encode($data));
     } else {
-        bf2w_log("Form object does not have get_fields() method");
-        bf2w_log("Form object type: " . get_class($form));
-        bf2w_log("Available methods: " . implode(', ', get_class_methods($form)));
+        bf2w_log("Form object does not have get_fields() method. Object type: " . get_class($form) . ", Methods: " . implode(', ', get_class_methods($form)));
     }
     
     // Try alternative ways to get form ID
@@ -397,15 +422,15 @@ function bf2w_handle_form_submission($form) {
         }
     }
     
-    bf2w_log("Webhook found: " . ($webhook_config ? 'Yes' : 'No'));
+    bf2w_log("Webhook found: " . ($webhook_config ? __('Yes', 'bricks-form-2-webhook') : __('No', 'bricks-form-2-webhook')));
     
     if (!$webhook_config) {
-        bf2w_log("No webhook configuration found for form ID: {$clean_form_id}");
+        bf2w_log(sprintf(esc_html__("No webhook configuration found for form ID: %s", 'bricks-form-2-webhook'), $clean_form_id));
         return; // No webhook configured for this form
     }
     
-    bf2w_log("Sending to webhook: {$webhook_config['webhook_url']}");
-    bf2w_log("Form data: " . json_encode($data));
+    bf2w_log(sprintf(esc_html__("Sending to webhook: %s", 'bricks-form-2-webhook'), $webhook_config['webhook_url']));
+    bf2w_log(esc_html__("Form data: ", 'bricks-form-2-webhook') . json_encode($data));
     
     // Send to webhook
     $args = array(
@@ -418,7 +443,7 @@ function bf2w_handle_form_submission($form) {
     
     if (is_wp_error($response)) {
         $error_message = $response->get_error_message();
-        bf2w_log("Webhook error: {$error_message}");
+        bf2w_log(sprintf(esc_html__("Webhook error: %s", 'bricks-form-2-webhook'), $error_message));
         
         if (method_exists($form, 'set_result')) {
             $form->set_result([
@@ -429,7 +454,7 @@ function bf2w_handle_form_submission($form) {
     } else {
         $response_code = wp_remote_retrieve_response_code($response);
         $response_body = wp_remote_retrieve_body($response);
-        bf2w_log("Webhook success - Response code: {$response_code}, Body: {$response_body}");
+        bf2w_log(sprintf(esc_html__("Webhook success - Response code: %s, Body: %s", 'bricks-form-2-webhook'), $response_code, $response_body));
         
         if (method_exists($form, 'set_result')) {
             $form->set_result([
@@ -440,19 +465,6 @@ function bf2w_handle_form_submission($form) {
     }
 }
 
-// Additional hook for testing - log all Bricks hooks
-add_action('init', function() {
-    $debug_mode = get_option('bf2w_debug_mode', false);
-    if (!$debug_mode) return;
-    
-    // Add debugging for all bricks hooks
-    add_action('all', function($hook) {
-        if (strpos($hook, 'bricks') !== false && strpos($hook, 'form') !== false) {
-            bf2w_log("Bricks hook fired: " . $hook);
-        }
-    });
-});
-
 // Display debug info
 function bf2w_display_debug_info() {
     $debug_mode = get_option('bf2w_debug_mode', false);
@@ -462,7 +474,7 @@ function bf2w_display_debug_info() {
     $log_file = $upload_dir['basedir'] . '/bf2w-debug.log';
     
     echo '<div class="bf2w-card">';
-    echo '<h2>📋 Debug Log</h2>';
+    echo '<h2>📋 ' . esc_html__('Debug Log', 'bricks-form-2-webhook') . '</h2>';
     
     if (file_exists($log_file)) {
         $log_content = file_get_contents($log_file);
@@ -471,21 +483,20 @@ function bf2w_display_debug_info() {
         
         echo '<div style="background: #f1f1f1; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;">';
         if (!empty($recent_lines)) {
-            echo '<strong>Posledních 10 záznamů:</strong><br><br>';
+            echo '<strong>' . esc_html__('Posledních 10 záznamů:', 'bricks-form-2-webhook') . '</strong><br><br>';
             foreach ($recent_lines as $line) {
                 echo esc_html($line) . '<br>';
             }
         } else {
-            echo 'Debug log je prázdný.';
+            echo esc_html__('Debug log je prázdný.', 'bricks-form-2-webhook');
         }
         echo '</div>';
         
         echo '<p style="margin-top: 10px;">';
-        echo '<small>Celkem záznamů: ' . count($log_lines) . ' | ';
-        echo 'Velikost souboru: ' . size_format(filesize($log_file)) . '</small>';
+        echo '<small>' . sprintf(esc_html__('Celkem záznamů: %d | Velikost souboru: %s', 'bricks-form-2-webhook'), count($log_lines), size_format(filesize($log_file))) . '</small>';
         echo '</p>';
     } else {
-        echo '<p>Debug log soubor neexistuje. Zkuste odeslat formulář pro vytvoření logů.</p>';
+        echo '<p>' . esc_html__('Debug log soubor neexistuje. Zkuste odeslat formulář pro vytvoření logů.', 'bricks-form-2-webhook') . '</p>';
     }
     
     echo '</div>';
@@ -516,6 +527,10 @@ function bf2w_check_for_update($transient) {
     
     // Get remote version from GitHub
     $remote_version = bf2w_get_remote_version();
+    
+    if (!$remote_version) { // Check if remote version was fetched successfully
+        return $transient;
+    }
     
     // Compare versions
     if (version_compare($current_version, $remote_version, '<')) {
@@ -601,7 +616,7 @@ function bf2w_plugin_info($result, $action, $args) {
         'download_link' => bf2w_get_download_url($remote_data['version'] ?? 'latest'),
         'sections' => array(
             'description' => $plugin_data['Description'],
-            'changelog' => $remote_data['changelog'] ?? 'Podrobnosti na GitHub stránce pluginu.'
+            'changelog' => $remote_data['changelog'] ?? __('Podrobnosti na GitHub stránce pluginu.', 'bricks-form-2-webhook')
         ),
         'banners' => array(),
         'icons' => array()
@@ -646,6 +661,6 @@ add_action('in_plugin_update_message-' . BF2W_PLUGIN_SLUG, 'bf2w_update_message'
 
 function bf2w_update_message($plugin_data, $response) {
     if (isset($response->new_version)) {
-        echo '<br><strong>🔄 Nová verze ' . esc_html($response->new_version) . ' je dostupná z GitHubu!</strong>';
+        echo '<br><strong>' . sprintf(esc_html__('🔄 Nová verze %s je dostupná z GitHubu!', 'bricks-form-2-webhook'), esc_html($response->new_version)) . '</strong>';
     }
 } 
