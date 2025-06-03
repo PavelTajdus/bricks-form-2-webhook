@@ -4,7 +4,7 @@ Donate link: https://www.buymeacoffee.com/paveltajdus
 Tags: bricks, bricksbuilder, form, webhook, integration
 Requires at least: 5.0
 Tested up to: 6.5
-Stable tag: 1.2.8
+Stable tag: 1.2.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,11 @@ Features:
 3.  Go to Bricks > Webhooks to configure your webhooks.
 
 == Changelog ==
+
+= 1.2.9 - YYYY-MM-DD =
+* Fixed: Improved ZIP archive creation for releases to ensure correct directory structure (`bricks-form-2-webhook/`) within the ZIP. This aims to definitively resolve issues with incorrect folder names after auto-updates.
+* Chore: Added debug logging for the resolved download URL during updates.
+* Chore: Removed an old, unused debug ZIP file from the repository.
 
 = 1.2.8 - YYYY-MM-DD =
 * Fixed: Auto-update process now downloads the correct ZIP asset from GitHub releases, ensuring the plugin directory is named `bricks-form-2-webhook/` without a version suffix. This should resolve the issue of incorrect plugin folder names after updates and the associated "Plugin file does not exist" warnings.

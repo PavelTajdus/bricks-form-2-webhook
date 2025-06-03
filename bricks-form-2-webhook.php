@@ -3,7 +3,7 @@
  * Plugin Name: Bricks Form 2 Webhook
  * Plugin URI: https://github.com/paveltajdus/bricks-form-2-webhook
  * Description: Sends Bricks Builder form submissions to any webhook URL using WordPress Custom Form Action.
- * Version: 1.2.8
+ * Version: 1.2.9
  * Author: Pavel Tajduš
  * Author URI: https://www.paveltajdus.cz
  * Text Domain: bricks-form-2-webhook
@@ -537,6 +537,11 @@ function bf2w_check_for_update($transient) {
     // Compare versions
     if (version_compare($current_version, $remote_version, '<')) {
         $download_url = bf2w_get_download_url($remote_version);
+
+        // Log the download URL for debugging
+        if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG === true) {
+            error_log('[BF2W Updater] Proposing update to ' . $remote_version . ' with package URL: ' . print_r($download_url, true));
+        }
         
         if ($download_url) { // Only offer update if we have a valid package URL
             $transient->response[BF2W_PLUGIN_SLUG] = (object) array(
@@ -546,6 +551,11 @@ function bf2w_check_for_update($transient) {
                 'url' => 'https://github.com/' . BF2W_GITHUB_USER . '/' . BF2W_GITHUB_REPO,
                 'package' => $download_url
             );
+        } else {
+            // Log if download URL is false
+            if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG === true) {
+                error_log('[BF2W Updater] Download URL for version ' . $remote_version . ' was not found or was invalid.');
+            }
         }
     }
 
@@ -709,4 +719,4 @@ function bf2w_update_message($plugin_data, $response) {
     }
 }
 
-define( 'BF2W_VERSION', '1.2.8' ); 
+define( 'BF2W_VERSION', '1.2.9' ); 
