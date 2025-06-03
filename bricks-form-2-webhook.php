@@ -52,7 +52,8 @@ class BricksForm2Webhook {
     }
     
     public function enqueue_admin_assets($hook) {
-        if ('bricks_page_bricks-form-2-webhook' !== $hook) {
+        // Debug: Check if we're on the right page
+        if (strpos($hook, 'bricks-form-2-webhook') === false) {
             return;
         }
         
@@ -78,25 +79,49 @@ class BricksForm2Webhook {
     }
     
     public function add_admin_menu() {
-        // Check if Bricks is active and has admin menu
-        if (function_exists('bricks_is_builder_main') || class_exists('Bricks\Database')) {
-            add_submenu_page(
+        $bricks_detected = false;
+        
+        // Check multiple ways if Bricks is active
+        if (class_exists('Bricks\Database') || 
+            defined('BRICKS_VERSION') || 
+            function_exists('bricks_is_builder_main') ||
+            is_plugin_active('bricks/bricks.php') ||
+            (function_exists('get_template') && get_template() === 'bricks')) {
+            $bricks_detected = true;
+        }
+        
+        // Debug info
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log('BF2W: Bricks detected: ' . ($bricks_detected ? 'yes' : 'no'));
+        }
+        
+        if ($bricks_detected) {
+            $hook = add_submenu_page(
                 'bricks',
                 __('Webhook for Forms', 'bricks-form-2-webhook'),
                 __('Webhook for Forms', 'bricks-form-2-webhook'),
                 'manage_options',
                 'bricks-form-2-webhook',
-                array($this, 'admin_page')
+                array($this, 'admin_page'),
+                100  // Position at the end of menu
             );
+            
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('BF2W: Added to Bricks menu with hook: ' . $hook);
+            }
         } else {
             // Fallback to Settings menu if Bricks is not detected
-            add_options_page(
+            $hook = add_options_page(
                 __('Bricks Form 2 Webhook', 'bricks-form-2-webhook'),
                 __('Bricks Form 2 Webhook', 'bricks-form-2-webhook'),
                 'manage_options',
                 'bricks-form-2-webhook',
                 array($this, 'admin_page')
             );
+            
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('BF2W: Added to Settings menu with hook: ' . $hook);
+            }
         }
     }
     
@@ -332,6 +357,17 @@ class BricksForm2Webhook {
     }
     
     public function admin_page() {
+        // Debug info
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log('BF2W Admin Page Loading - Hook: ' . current_filter());
+            error_log('BF2W Admin Page - Current user can manage_options: ' . (current_user_can('manage_options') ? 'yes' : 'no'));
+        }
+        
+        // Security check
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
+        
         $options = get_option('bf2w_settings', array('forms' => array()));
         $editing_id = isset($_GET['edit']) ? intval($_GET['edit']) : null;
         $editing_webhook = null;
