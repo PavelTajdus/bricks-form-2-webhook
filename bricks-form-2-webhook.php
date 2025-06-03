@@ -3,7 +3,7 @@
  * Plugin Name: Bricks Form 2 Webhook
  * Plugin URI: https://github.com/paveltajdus/bricks-form-2-webhook
  * Description: Sends Bricks Builder form submissions to any webhook URL using WordPress Custom Form Action.
- * Version: 1.2.3
+ * Version: 1.2.4
  * Author: Pavel Tajdus
  * Author URI: https://www.tajdus.cz
  * Text Domain: bricks-form-2-webhook
@@ -12,6 +12,21 @@
  * Requires at least: 5.8
  * Requires PHP: 7.4
  */
+
+// Early debug log to check paths during/after update
+if (function_exists('bf2w_log_early')) {
+    bf2w_log_early("Plugin file loaded: " . __FILE__);
+    bf2w_log_early("Plugin basename: " . plugin_basename(__FILE__));
+} else {
+    // Fallback basic logger if bf2w_log is not yet available or during early load problem
+    // Note: This basic logger won't check for WP_DEBUG and will always try to log if this code runs.
+    // It also doesn't have the timestamp or BF2W prefix of the main logger.
+    // This is INTENTIONAL for this specific debug purpose.
+    $upload_dir_arr = wp_upload_dir();
+    $log_file_path = $upload_dir_arr['basedir'] . '/bf2w-debug.log';
+    $message_to_log = "EARLY LOG: Plugin file loaded: " . __FILE__ . " | Plugin basename: " . plugin_basename(__FILE__) . PHP_EOL;
+    file_put_contents($log_file_path, $message_to_log, FILE_APPEND | LOCK_EX);
+}
 
 // Prevent direct access
 if (!defined('ABSPATH')) {
@@ -335,7 +350,7 @@ function bf2w_log($message) {
     if (!$debug_mode) return;
     
     $timestamp = current_time('Y-m-d H:i:s');
-    $log_entry = "[{$timestamp}] BF2W: {$message}" . PHP_EOL;
+    $log_entry = "[{$timestamp}] BF2W: " . (is_array($message) || is_object($message) ? json_encode($message) : $message) . PHP_EOL;
     
     // Save to custom log in uploads directory
     $upload_dir = wp_upload_dir();
