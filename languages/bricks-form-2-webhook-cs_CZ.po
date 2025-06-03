@@ -1,0 +1,228 @@
+# Czech (Czech Republic) translations for Bricks Form 2 Webhook
+# Copyright (C) 2024 Pavel Tajdus
+# This file is distributed under the same license as the Bricks Form 2 Webhook package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Bricks Form 2 Webhook 1.0.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 12:00+0000\n"
+"PO-Revision-Date: 2024-01-01 12:00+0000\n"
+"Last-Translator: Pavel Tajdus <info@tajdus.cz>\n"
+"Language-Team: Czech\n"
+"Language: cs_CZ\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: bricks-form-2-webhook.php
+msgid "Webhook for Forms"
+msgstr "Webhook pro formuláře"
+
+#: bricks-form-2-webhook.php
+msgid "Bricks Form 2 Webhook"
+msgstr "Bricks Form 2 Webhook"
+
+#: bricks-form-2-webhook.php
+msgid "Form ID and Webhook URL are required."
+msgstr "ID formuláře a URL webhooku jsou povinné."
+
+#: bricks-form-2-webhook.php
+msgid "Form ID already exists. Please use a different Form ID."
+msgstr "ID formuláře již existuje. Použijte prosím jiné ID formuláře."
+
+#: bricks-form-2-webhook.php
+msgid "Webhook added successfully."
+msgstr "Webhook byl úspěšně přidán."
+
+#: bricks-form-2-webhook.php
+msgid "Webhook not found."
+msgstr "Webhook nebyl nalezen."
+
+#: bricks-form-2-webhook.php
+msgid "Webhook updated successfully."
+msgstr "Webhook byl úspěšně aktualizován."
+
+#: bricks-form-2-webhook.php
+msgid "Webhook deleted successfully."
+msgstr "Webhook byl úspěšně smazán."
+
+#: bricks-form-2-webhook.php
+msgid "Debug mode enabled."
+msgstr "Debug režim byl zapnut."
+
+#: bricks-form-2-webhook.php
+msgid "Debug mode disabled."
+msgstr "Debug režim byl vypnut."
+
+#: bricks-form-2-webhook.php
+msgid "Data successfully sent"
+msgstr "Data byla úspěšně odeslána"
+
+#: bricks-form-2-webhook.php
+msgid "Error sending data"
+msgstr "Chyba při odesílání dat"
+
+#: bricks-form-2-webhook.php
+msgid "Webhook for Forms Settings"
+msgstr "Nastavení Webhook pro formuláře"
+
+#: bricks-form-2-webhook.php
+msgid "Important:"
+msgstr "Důležité:"
+
+#: bricks-form-2-webhook.php
+msgid "Don't forget to set 'Custom' action in your Bricks form settings!"
+msgstr "Nezapomeňte nastavit akci 'Custom' v nastavení Bricks formuláře!"
+
+#: bricks-form-2-webhook.php
+msgid "Add New Form Webhook"
+msgstr "Přidat nový webhook formuláře"
+
+#: bricks-form-2-webhook.php
+msgid "Edit Form Webhook"
+msgstr "Upravit webhook formuláře"
+
+#: bricks-form-2-webhook.php
+msgid "Form ID"
+msgstr "ID formuláře"
+
+#: bricks-form-2-webhook.php
+msgid "Enter the form ID (without \"bricks-element-\" prefix). Example: if CSS ID is \"bricks-element-fszxsr\", enter \"fszxsr\""
+msgstr "Zadejte ID formuláře (bez předpony \"bricks-element-\"). Příklad: pokud je CSS ID \"bricks-element-fszxsr\", zadejte \"fszxsr\""
+
+#: bricks-form-2-webhook.php
+msgid "Webhook URL"
+msgstr "URL webhooku"
+
+#: bricks-form-2-webhook.php
+msgid "Enter the webhook URL where form data will be sent."
+msgstr "Zadejte URL webhook, kam budou odeslána data z formuláře."
+
+#: bricks-form-2-webhook.php
+msgid "Success Message"
+msgstr "Zpráva o úspěchu"
+
+#: bricks-form-2-webhook.php
+msgid "Message shown to users when form is submitted successfully."
+msgstr "Zpráva zobrazená uživatelům při úspěšném odeslání formuláře."
+
+#: bricks-form-2-webhook.php
+msgid "Error Message"
+msgstr "Chybová zpráva"
+
+#: bricks-form-2-webhook.php
+msgid "Message shown to users when form submission fails."
+msgstr "Zpráva zobrazená uživatelům při neúspěšném odeslání formuláře."
+
+#: bricks-form-2-webhook.php
+msgid "Update Webhook"
+msgstr "Aktualizovat webhook"
+
+#: bricks-form-2-webhook.php
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: bricks-form-2-webhook.php
+msgid "Add Webhook"
+msgstr "Přidat webhook"
+
+#: bricks-form-2-webhook.php
+msgid "Debug Options"
+msgstr "Debug možnosti"
+
+#: bricks-form-2-webhook.php
+msgid "Enable Debug Mode"
+msgstr "Zapnout debug režim"
+
+#: bricks-form-2-webhook.php
+msgid "Enable debug logging for troubleshooting"
+msgstr "Zapnout debug logování pro řešení problémů"
+
+#: bricks-form-2-webhook.php
+msgid "Save Settings"
+msgstr "Uložit nastavení"
+
+#: bricks-form-2-webhook.php
+msgid "Existing Form Webhooks"
+msgstr "Existující webhooky formulářů"
+
+#: bricks-form-2-webhook.php
+msgid "Actions"
+msgstr "Akce"
+
+#: bricks-form-2-webhook.php
+msgid "Edit"
+msgstr "Upravit"
+
+#: bricks-form-2-webhook.php
+msgid "Are you sure you want to delete this webhook?"
+msgstr "Jste si jisti, že chcete tento webhook smazat?"
+
+#: bricks-form-2-webhook.php
+msgid "Delete"
+msgstr "Smazat"
+
+#: bricks-form-2-webhook.php
+msgid "Setup Instructions"
+msgstr "Pokyny k nastavení"
+
+#: bricks-form-2-webhook.php
+msgid "Add form webhook configurations above (Form ID + Webhook URL)"
+msgstr "Přidejte konfigurace webhooků formulářů výše (ID formuláře + Webhook URL)"
+
+#: bricks-form-2-webhook.php
+msgid "Copy the Bricks form ID from form CSS ID (e.g., if CSS ID is \"bricks-element-fszxsr\", form ID is \"fszxsr\")"
+msgstr "Zkopírujte ID Bricks formuláře z CSS ID formuláře (např. pokud je CSS ID \"bricks-element-fszxsr\", ID formuláře je \"fszxsr\")"
+
+#: bricks-form-2-webhook.php
+msgid "Enter the webhook URL for each form"
+msgstr "Zadejte webhook URL pro každý formulář"
+
+#: bricks-form-2-webhook.php
+msgid "Go to your Bricks form settings"
+msgstr "Přejděte do nastavení Bricks formuláře"
+
+#: bricks-form-2-webhook.php
+msgid "Add new action and select \"Custom\""
+msgstr "Přidejte novou akci a vyberte \"Custom\""
+
+#: bricks-form-2-webhook.php
+msgid "Save everything and test your forms"
+msgstr "Uložte vše a otestujte formuláře"
+
+#: bricks-form-2-webhook.php
+msgid "Last Submission Debug Info"
+msgstr "Debug informace posledního odeslání"
+
+#: bricks-form-2-webhook.php
+msgid "Timestamp"
+msgstr "Časové razítko"
+
+#: bricks-form-2-webhook.php
+msgid "Form ID Received"
+msgstr "Přijaté ID formuláře"
+
+#: bricks-form-2-webhook.php
+msgid "Form Config Found"
+msgstr "Konfigurace formuláře nalezena"
+
+#: bricks-form-2-webhook.php
+msgid "Configured Forms"
+msgstr "Nakonfigurované formuláře"
+
+#: bricks-form-2-webhook.php
+msgid "Form Data"
+msgstr "Data formuláře"
+
+#: bricks-form-2-webhook.php
+msgid "Response Code"
+msgstr "Kód odpovědi"
+
+#: bricks-form-2-webhook.php
+msgid "Response Body"
+msgstr "Tělo odpovědi"
+
+#: bricks-form-2-webhook.php
+msgid "Error"
+msgstr "Chyba" 

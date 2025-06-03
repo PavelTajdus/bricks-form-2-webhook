@@ -1,14 +1,391 @@
-/* assets/css/admin.css */
-.wrap {
-    max-width: 800px;
-    margin: 20px auto;
+/* Bricks Form 2 Webhook Admin Styles */
+
+/* Setup Instructions */
+.bf2w-setup-instructions {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
 }
 
+.bf2w-setup-instructions h2 {
+    margin-top: 0;
+    color: #23282d;
+}
+
+.bf2w-setup-instructions ol {
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.bf2w-setup-instructions li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+/* Add/Edit Webhook Section */
+.bf2w-add-webhook {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.bf2w-add-webhook h2 {
+    margin-top: 0;
+    color: #23282d;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.bf2w-add-webhook .form-table th {
+    width: 200px;
+    padding-left: 0;
+}
+
+.bf2w-add-webhook .required {
+    color: #dc3232;
+    font-weight: bold;
+}
+
+/* Debug Options Section */
+.bf2w-debug-options {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.bf2w-debug-options h2 {
+    margin-top: 0;
+    color: #23282d;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.bf2w-debug-options .form-table th {
+    width: 200px;
+    padding-left: 0;
+}
+
+/* Existing Webhooks Table */
+.bf2w-existing-webhooks {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.bf2w-existing-webhooks h2 {
+    margin-top: 0;
+    color: #23282d;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.bf2w-existing-webhooks .wp-list-table {
+    margin-top: 15px;
+}
+
+.bf2w-existing-webhooks .wp-list-table th,
+.bf2w-existing-webhooks .wp-list-table td {
+    padding: 12px 10px;
+}
+
+.bf2w-existing-webhooks .wp-list-table code {
+    background: #f6f7f7;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+    color: #d63384;
+}
+
+.bf2w-existing-webhooks .wp-list-table .dashicons {
+    font-size: 14px;
+    margin-left: 5px;
+    color: #2271b1;
+}
+
+.bf2w-existing-webhooks .wp-list-table .button-small {
+    margin-right: 5px;
+}
+
+.bf2w-existing-webhooks .wp-list-table .button-link-delete {
+    color: #b32d2e;
+}
+
+.bf2w-existing-webhooks .wp-list-table .button-link-delete:hover {
+    color: #dc3232;
+}
+
+/* Debug Info Section */
+.bf2w-debug-info {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.bf2w-debug-info h2 {
+    margin-top: 0;
+    color: #23282d;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.bf2w-debug-info table {
+    margin-top: 15px;
+}
+
+.bf2w-debug-info table td {
+    vertical-align: top;
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.bf2w-debug-info table td:first-child {
+    width: 200px;
+    font-weight: 600;
+}
+
+.bf2w-debug-info pre {
+    background: #f6f7f7;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 10px;
+    font-size: 12px;
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Notice Styling */
+.notice.notice-warning {
+    border-left-color: #f56e28;
+}
+
+/* Form Table Improvements */
 .form-table th {
     width: 200px;
 }
 
-.description {
-    margin-top: 5px;
+.form-table .description {
+    font-style: italic;
     color: #666;
+    margin-top: 5px;
 }
+
+.form-table .regular-text {
+    width: 400px;
+}
+
+/* Success/Error indicators */
+.bf2w-status-success {
+    color: #46b450;
+    font-weight: bold;
+}
+
+.bf2w-status-error {
+    color: #dc3232;
+    font-weight: bold;
+}
+
+/* Plugin header styling */
+.wrap h1 {
+    margin-bottom: 20px;
+}
+
+/* Button styling */
+.button-primary {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+}
+
+.button-primary:hover {
+    background: #135e96;
+    border-color: #135e96;
+}
+
+/* Action buttons in table */
+.bf2w-existing-webhooks .wp-list-table .actions {
+    white-space: nowrap;
+}
+
+/* Empty state */
+.bf2w-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #646970;
+    background: #f9f9f9;
+    border: 1px dashed #ccd0d4;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.bf2w-empty-state h3 {
+    margin-top: 0;
+    color: #1d2327;
+}
+
+.bf2w-empty-state .button-primary {
+    margin-top: 15px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 782px) {
+    .bf2w-debug-info table td:first-child {
+        width: auto;
+        display: block;
+        border-bottom: none;
+        padding-bottom: 5px;
+    }
+    
+    .bf2w-debug-info table td:last-child {
+        padding-top: 0;
+    }
+    
+    .form-table .regular-text {
+        width: 100%;
+        max-width: none;
+    }
+    
+    .bf2w-existing-webhooks .wp-list-table {
+        font-size: 14px;
+    }
+    
+    .bf2w-existing-webhooks .wp-list-table th,
+    .bf2w-existing-webhooks .wp-list-table td {
+        padding: 8px 5px;
+    }
+    
+    .bf2w-existing-webhooks .wp-list-table .button-small {
+        margin: 2px;
+        display: block;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .bf2w-add-webhook,
+    .bf2w-debug-options,
+    .bf2w-existing-webhooks,
+    .bf2w-debug-info {
+        padding: 15px;
+    }
+    
+    .bf2w-existing-webhooks .wp-list-table th:nth-child(3),
+    .bf2w-existing-webhooks .wp-list-table th:nth-child(4),
+    .bf2w-existing-webhooks .wp-list-table td:nth-child(3),
+    .bf2w-existing-webhooks .wp-list-table td:nth-child(4) {
+        display: none;
+    }
+}
+
+/* Debug info table improvements */
+.bf2w-debug-info .widefat td {
+    word-break: break-word;
+}
+
+.bf2w-debug-info .widefat tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Loading state */
+.bf2w-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Form validation */
+.form-invalid {
+    border-color: #dc3232 !important;
+    box-shadow: 0 0 2px rgba(220, 50, 50, 0.5);
+}
+
+/* Highlight animations */
+.bf2w-highlight {
+    animation: highlight 2s ease-out;
+}
+
+@keyframes highlight {
+    0% {
+        background-color: #fffbf0;
+        border-color: #f0b849;
+    }
+    100% {
+        background-color: transparent;
+        border-color: #ccd0d4;
+    }
+}
+
+/* Table row hover effects */
+.bf2w-existing-webhooks .wp-list-table tbody tr:hover {
+    background-color: #f6f7f7;
+}
+
+/* External link styling */
+.bf2w-existing-webhooks .wp-list-table a[target="_blank"] {
+    text-decoration: none;
+}
+
+.bf2w-existing-webhooks .wp-list-table a[target="_blank"]:hover {
+    text-decoration: underline;
+}
+
+/* Confirmation dialogs improvement */
+.bf2w-confirm-delete {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+/* Better spacing */
+.bf2w-add-webhook,
+.bf2w-debug-options,
+.bf2w-existing-webhooks {
+    margin-bottom: 30px;
+}
+
+.bf2w-add-webhook:first-child {
+    margin-top: 0;
+}
+
+/* Focus states */
+.bf2w-add-webhook input:focus,
+.bf2w-debug-options input:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+/* Section dividers */
+.bf2w-add-webhook,
+.bf2w-debug-options,
+.bf2w-existing-webhooks,
+.bf2w-setup-instructions,
+.bf2w-debug-info {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Table enhancements */
+.bf2w-existing-webhooks .wp-list-table .column-form_id {
+    width: 120px;
+}
+
+.bf2w-existing-webhooks .wp-list-table .column-webhook_url {
+    width: 250px;
+}
+
+.bf2w-existing-webhooks .wp-list-table .column-actions {
+    width: 150px;
+} 
