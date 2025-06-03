@@ -3,7 +3,7 @@
  * Plugin Name: Bricks Form 2 Webhook
  * Plugin URI: https://github.com/paveltajdus/bricks-form-2-webhook
  * Description: Sends Bricks Builder form submissions to any webhook URL using WordPress Custom Form Action.
- * Version: 1.2.4
+ * Version: 1.2.5
  * Author: Pavel Tajdus
  * Author URI: https://www.tajdus.cz
  * Text Domain: bricks-form-2-webhook
@@ -13,19 +13,25 @@
  * Requires PHP: 7.4
  */
 
-// Early debug log to check paths during/after update
-if (function_exists('bf2w_log_early')) {
-    bf2w_log_early("Plugin file loaded: " . __FILE__);
-    bf2w_log_early("Plugin basename: " . plugin_basename(__FILE__));
-} else {
-    // Fallback basic logger if bf2w_log is not yet available or during early load problem
-    // Note: This basic logger won't check for WP_DEBUG and will always try to log if this code runs.
-    // It also doesn't have the timestamp or BF2W prefix of the main logger.
-    // This is INTENTIONAL for this specific debug purpose.
-    $upload_dir_arr = wp_upload_dir();
-    $log_file_path = $upload_dir_arr['basedir'] . '/bf2w-debug.log';
-    $message_to_log = "EARLY LOG: Plugin file loaded: " . __FILE__ . " | Plugin basename: " . plugin_basename(__FILE__) . PHP_EOL;
-    file_put_contents($log_file_path, $message_to_log, FILE_APPEND | LOCK_EX);
+// Early debug log to check paths during/after update (v2 - simplified)
+try {
+    if (defined('WP_CONTENT_DIR')) { // Check if basic WP constants are available
+        $log_file_path = WP_CONTENT_DIR . '/../bf2w-debug.log'; // Attempt to place it one level up from wp-content if wp_upload_dir is not safe yet
+        if (is_writable(dirname($log_file_path))) {
+            $message_to_log = gmdate('Y-m-d H:i:s') . " UTC - EARLY LOG: Plugin file " . __FILE__ . " loaded. Basename: " . plugin_basename(__FILE__) . PHP_EOL;
+            file_put_contents($log_file_path, $message_to_log, FILE_APPEND | LOCK_EX);
+        } else {
+            // Fallback if a common log path isn't writable, try error_log if configured
+            error_log("EARLY LOG (permissions issue?): Plugin file " . __FILE__ . " loaded. Basename: " . plugin_basename(__FILE__));
+        }
+    } else {
+        // Super early, WP constants might not be loaded, try relative path (less reliable)
+        // This may or may not work depending on cwd and permissions
+        @file_put_contents(dirname(__FILE__) . '/bf2w-early-debug.log', gmdate('Y-m-d H:i:s') . " UTC - SUPER EARLY LOG: " . __FILE__ . PHP_EOL, FILE_APPEND | LOCK_EX);
+    }
+} catch (Exception $e) {
+    // Prevent any error from this debug code consejo breaking the site
+    error_log("EARLY LOG EXCEPTION: " . $e->getMessage());
 }
 
 // Prevent direct access
