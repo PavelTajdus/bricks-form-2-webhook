@@ -3,7 +3,7 @@
  * Plugin Name: Bricks Form 2 Webhook
  * Plugin URI: https://github.com/paveltajdus/bricks-form-2-webhook
  * Description: Sends Bricks Builder form submissions to any webhook URL using WordPress Custom Form Action.
- * Version: 1.2.10
+ * Version: 1.2.11
  * Author: Pavel Tajduš
  * Author URI: https://www.paveltajdus.cz
  * Text Domain: bricks-form-2-webhook
@@ -719,4 +719,4 @@ function bf2w_update_message($plugin_data, $response) {
     }
 }
 
-define( 'BF2W_VERSION', '1.2.10' ); 
+define( 'BF2W_VERSION', '1.2.11' ); 

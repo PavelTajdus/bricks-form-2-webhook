@@ -4,7 +4,7 @@ Donate link: https://www.buymeacoffee.com/paveltajdus
 Tags: bricks, bricksbuilder, form, webhook, integration
 Requires at least: 5.0
 Tested up to: 6.5
-Stable tag: 1.2.10
+Stable tag: 1.2.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,9 @@ Features:
 3.  Go to Bricks > Webhooks to configure your webhooks.
 
 == Changelog ==
+
+= 1.2.11 - YYYY-MM-DD =
+* Test: Re-testing GitHub Actions for automated release after YAML fix.
 
 = 1.2.10 - YYYY-MM-DD =
 * Test: Verifying GitHub Actions for automated release.
