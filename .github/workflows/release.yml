@@ -1,0 +1,94 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*' # Spustí se pro tagy jako v1.2.3, v1.3.0 atd.
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Potřebné pro vytvoření releasu a nahrání assetů
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # Používáme v4 pro checkout
+        with:
+          fetch-depth: 0 # Potřebné pro získání všech tagů, pokud byste chtěli generovat changelog
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Build Release ZIP
+        run: |
+          # Nastavení proměnných z předchozího kroku a pevných hodnot
+          VERSION_TAG=${{ steps.get_version.outputs.VERSION }}
+          PLUGIN_SLUG=bricks-form-2-webhook # Slug vašeho pluginu
+          ARCHIVE_NAME=${PLUGIN_SLUG}.zip
+          TEMP_DIR=./temp_release_build
+
+          echo "=================================================="
+          echo "Starting release build for tag: $VERSION_TAG"
+          echo "Plugin Slug: $PLUGIN_SLUG"
+          echo "Archive Name: $ARCHIVE_NAME"
+          echo "Temporary Directory: $TEMP_DIR"
+          echo "=================================================="
+
+          # Vyčištění starých artefaktů, pokud by existovaly
+          echo "Cleaning up old artifacts..."
+          rm -rf ${TEMP_DIR}
+          rm -f ${ARCHIVE_NAME}
+          echo "Cleanup complete."
+          
+          # Vytvoření dočasné struktury pro sestavení
+          echo "Creating temporary build structure: ${TEMP_DIR}/${PLUGIN_SLUG}/"
+          mkdir -p ${TEMP_DIR}/${PLUGIN_SLUG}/
+          
+          # Export obsahu tagu do dočasného adresáře
+          echo "Archiving tag content into temporary directory..."
+          git archive ${VERSION_TAG} | tar -x -C ${TEMP_DIR}/${PLUGIN_SLUG}/
+          echo "Tag content archived."
+
+          # Výpis obsahu pro kontrolu
+          echo "--------------------------------------------------"
+          echo "Contents of ${TEMP_DIR}/${PLUGIN_SLUG}/ (before zipping):"
+          ls -R ${TEMP_DIR}/${PLUGIN_SLUG}/
+          echo "--------------------------------------------------"
+          
+          # Vytvoření ZIP archivu ze správného místa
+          echo "Creating ZIP archive: ${ARCHIVE_NAME}..."
+          (cd ${TEMP_DIR} && zip -r ../${ARCHIVE_NAME} ${PLUGIN_SLUG}/)
+          echo "ZIP archive created successfully."
+
+          # Výpis informací o vytvořeném archivu
+          echo "--------------------------------------------------"
+          echo "Details of the created archive:"
+          ls -l ${ARCHIVE_NAME}
+          echo "Verifying ZIP content (top level):"
+          unzip -l ${ARCHIVE_NAME} | head -n 10 # Ukáže prvních pár řádků obsahu ZIPu
+          echo "--------------------------------------------------"
+
+          # Úklid dočasného adresáře
+          echo "Cleaning up temporary build directory..."
+          rm -rf ${TEMP_DIR}
+          echo "Build process complete."
+          echo "=================================================="
+
+      - name: Create GitHub Release
+        id: create_release # Přidáno ID pro případné odkazy na výstup
+        uses: softprops/action-gh-release@v1
+        with:
+          files: bricks-form-2-webhook.zip
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          name: Release ${{ steps.get_version.outputs.VERSION }}
+          body: | # Víceřádkové tělo releasu
+            Release of version ${{ steps.get_version.outputs.VERSION }}.
+            Please see the changelog or commit history for details.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Output Release URL
+        run: echo "New release created: ${{ steps.create_release.outputs.url }}" 
