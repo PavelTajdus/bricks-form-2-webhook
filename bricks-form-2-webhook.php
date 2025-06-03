@@ -3,7 +3,7 @@
  * Plugin Name: Bricks Form 2 Webhook
  * Plugin URI: https://github.com/paveltajdus/bricks-form-2-webhook
  * Description: Sends Bricks Builder form submissions to any webhook URL using WordPress Custom Form Action.
- * Version: 1.2.7
+ * Version: 1.2.8
  * Author: Pavel Tajduš
  * Author URI: https://www.paveltajdus.cz
  * Text Domain: bricks-form-2-webhook
@@ -12,27 +12,6 @@
  * Requires at least: 5.8
  * Requires PHP: 7.4
  */
-
-// Early debug log to check paths during/after update (v2 - simplified)
-try {
-    if (defined('WP_CONTENT_DIR')) { // Check if basic WP constants are available
-        $log_file_path = WP_CONTENT_DIR . '/../bf2w-debug.log'; // Attempt to place it one level up from wp-content if wp_upload_dir is not safe yet
-        if (is_writable(dirname($log_file_path))) {
-            $message_to_log = gmdate('Y-m-d H:i:s') . " UTC - EARLY LOG (v1.2.6): Plugin file " . __FILE__ . " loaded. Basename: " . plugin_basename(__FILE__) . PHP_EOL;
-            file_put_contents($log_file_path, $message_to_log, FILE_APPEND | LOCK_EX);
-        } else {
-            // Fallback if a common log path isn't writable, try error_log if configured
-            error_log("EARLY LOG (permissions issue?): Plugin file " . __FILE__ . " loaded. Basename: " . plugin_basename(__FILE__));
-        }
-    } else {
-        // Super early, WP constants might not be loaded, try relative path (less reliable)
-        // This may or may not work depending on cwd and permissions
-        @file_put_contents(dirname(__FILE__) . '/bf2w-early-debug.log', gmdate('Y-m-d H:i:s') . " UTC - SUPER EARLY LOG: " . __FILE__ . PHP_EOL, FILE_APPEND | LOCK_EX);
-    }
-} catch (Exception $e) {
-    // Prevent any error from this debug code consejo breaking the site
-    error_log("EARLY LOG EXCEPTION: " . $e->getMessage());
-}
 
 // Prevent direct access
 if (!defined('ABSPATH')) {
@@ -557,13 +536,17 @@ function bf2w_check_for_update($transient) {
     
     // Compare versions
     if (version_compare($current_version, $remote_version, '<')) {
-        $transient->response[BF2W_PLUGIN_SLUG] = (object) array(
-            'slug' => dirname(BF2W_PLUGIN_SLUG),
-            'plugin' => BF2W_PLUGIN_SLUG,
-            'new_version' => $remote_version,
-            'url' => 'https://github.com/' . BF2W_GITHUB_USER . '/' . BF2W_GITHUB_REPO,
-            'package' => bf2w_get_download_url($remote_version)
-        );
+        $download_url = bf2w_get_download_url($remote_version);
+        
+        if ($download_url) { // Only offer update if we have a valid package URL
+            $transient->response[BF2W_PLUGIN_SLUG] = (object) array(
+                'slug' => dirname(BF2W_PLUGIN_SLUG),
+                'plugin' => BF2W_PLUGIN_SLUG,
+                'new_version' => $remote_version,
+                'url' => 'https://github.com/' . BF2W_GITHUB_USER . '/' . BF2W_GITHUB_REPO,
+                'package' => $download_url
+            );
+        }
     }
 
     return $transient;
@@ -598,13 +581,51 @@ function bf2w_get_remote_version() {
 }
 
 // Get download URL for specific version
-function bf2w_get_download_url($version = 'latest') {
-    if ($version === 'latest') {
-        return 'https://github.com/' . BF2W_GITHUB_USER . '/' . BF2W_GITHUB_REPO . '/archive/refs/heads/main.zip';
+function bf2w_get_download_url($version) {
+    if (empty($version)) {
+        return false; 
+    }
+
+    $api_url = 'https://api.github.com/repos/' . BF2W_GITHUB_USER . '/' . BF2W_GITHUB_REPO . '/releases/tags/v' . $version;
+    
+    $request_args = array(
+        'headers' => array(
+            'Accept' => 'application/vnd.github.v3+json',
+            'User-Agent' => 'WordPress/' . get_bloginfo('version') . '; ' . home_url()
+        ),
+        'timeout' => 15 
+    );
+    
+    // Add token if defined, to avoid rate limiting for private repos (though this repo is public)
+    if (defined('BF2W_GITHUB_TOKEN') && !empty(BF2W_GITHUB_TOKEN)) {
+        $request_args['headers']['Authorization'] = 'token ' . BF2W_GITHUB_TOKEN;
+    }
+
+    $request = wp_remote_get($api_url, $request_args);
+
+    if (is_wp_error($request) || wp_remote_retrieve_response_code($request) !== 200) {
+        // Optional: Log error for debugging
+        // error_log('BF2W GitHub API Error for release tag v' . $version . ': ' . (is_wp_error($request) ? $request->get_error_message() : wp_remote_retrieve_response_code($request) . ' ' . wp_remote_retrieve_response_message($request)));
+        return false;
+    }
+
+    $release_data = json_decode(wp_remote_retrieve_body($request), true);
+
+    if (empty($release_data) || !isset($release_data['assets']) || !is_array($release_data['assets'])) {
+        // Optional: Log error
+        // error_log('BF2W GitHub Release data or assets missing for tag v' . $version);
+        return false;
+    }
+
+    foreach ($release_data['assets'] as $asset) {
+        if (isset($asset['name']) && $asset['name'] === 'bricks-form-2-webhook.zip' && isset($asset['browser_download_url'])) {
+            return $asset['browser_download_url'];
+        }
     }
     
-    // Use release ZIP
-    return 'https://github.com/' . BF2W_GITHUB_USER . '/' . BF2W_GITHUB_REPO . '/archive/refs/tags/v' . $version . '.zip';
+    // Optional: Log error if specific asset not found
+    // error_log('BF2W GitHub Release Asset "bricks-form-2-webhook.zip" not found for tag v' . $version);
+    return false; 
 }
 
 // Provide plugin information for update details
@@ -688,4 +709,4 @@ function bf2w_update_message($plugin_data, $response) {
     }
 }
 
-define( 'BF2W_VERSION', '1.2.7' ); 
+define( 'BF2W_VERSION', '1.2.8' ); 

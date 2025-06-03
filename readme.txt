@@ -4,11 +4,11 @@ Donate link: https://www.buymeacoffee.com/paveltajdus
 Tags: bricks, bricksbuilder, form, webhook, integration
 Requires at least: 5.0
 Tested up to: 6.5
-Stable tag: 1.2.7
+Stable tag: 1.2.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Sends Bricks Builder form submissions to any webhook URL using WordPress Custom Form Action. Test version for update debugging.
+Sends Bricks Builder form submissions to any webhook URL using WordPress Custom Form Action.
 
 == Description ==
 
@@ -29,6 +29,10 @@ Features:
 3.  Go to Bricks > Webhooks to configure your webhooks.
 
 == Changelog ==
+
+= 1.2.8 - YYYY-MM-DD =
+* Fixed: Auto-update process now downloads the correct ZIP asset from GitHub releases, ensuring the plugin directory is named `bricks-form-2-webhook/` without a version suffix. This should resolve the issue of incorrect plugin folder names after updates and the associated "Plugin file does not exist" warnings.
+* Chore: Removed early debug logging code.
 
 = 1.2.7 - YYYY-MM-DD =
 * Minor update for testing the auto-update process.
