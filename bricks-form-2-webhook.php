@@ -3,7 +3,7 @@
  * Plugin Name: Bricks Form 2 Webhook
  * Plugin URI: https://github.com/paveltajdus/bricks-form-2-webhook
  * Description: Sends Bricks Builder form submissions to any webhook URL using WordPress Custom Form Action.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Pavel Tajdus
  * Author URI: https://www.tajdus.cz
  * Text Domain: bricks-form-2-webhook
@@ -346,10 +346,39 @@ function bf2w_clear_debug_log() {
 
 // Handle Bricks form submission (podle funkční verze!)
 add_action('bricks/form/submit', 'bf2w_handle_form_submission', 10, 1);
+add_action('bricks/form/custom_action', 'bf2w_handle_form_submission', 10, 1);
 
 function bf2w_handle_form_submission($form) {
-    $data = $form->get_fields();
-    $formId = isset($data['formId']) ? $data['formId'] : '';
+    bf2w_log("=== FORM SUBMISSION DETECTED ===");
+    bf2w_log("Hook called: " . current_action());
+    
+    // Try to get form data
+    $data = array();
+    if (method_exists($form, 'get_fields')) {
+        $data = $form->get_fields();
+        bf2w_log("Got form data via get_fields(): " . json_encode($data));
+    } else {
+        bf2w_log("Form object does not have get_fields() method");
+        bf2w_log("Form object type: " . get_class($form));
+        bf2w_log("Available methods: " . implode(', ', get_class_methods($form)));
+    }
+    
+    // Try alternative ways to get form ID
+    $formId = '';
+    if (isset($data['formId'])) {
+        $formId = $data['formId'];
+    } else if (isset($_POST['formId'])) {
+        $formId = $_POST['formId'];
+        bf2w_log("Form ID from POST: " . $formId);
+    } else if (method_exists($form, 'get_form_id')) {
+        $formId = $form->get_form_id();
+        bf2w_log("Form ID from get_form_id(): " . $formId);
+    }
+    
+    if (empty($data) && !empty($_POST)) {
+        $data = $_POST;
+        bf2w_log("Using POST data as fallback: " . json_encode($_POST));
+    }
     
     // Remove bricks-element- prefix if present
     $clean_form_id = str_replace('bricks-element-', '', $formId);
@@ -391,21 +420,38 @@ function bf2w_handle_form_submission($form) {
         $error_message = $response->get_error_message();
         bf2w_log("Webhook error: {$error_message}");
         
-        $form->set_result([
-            'type' => 'danger',
-            'message' => $webhook_config['error_message'],
-        ]);
+        if (method_exists($form, 'set_result')) {
+            $form->set_result([
+                'type' => 'danger',
+                'message' => $webhook_config['error_message'],
+            ]);
+        }
     } else {
         $response_code = wp_remote_retrieve_response_code($response);
         $response_body = wp_remote_retrieve_body($response);
         bf2w_log("Webhook success - Response code: {$response_code}, Body: {$response_body}");
         
-        $form->set_result([
-            'type' => 'success',
-            'message' => $webhook_config['success_message'],
-        ]);
+        if (method_exists($form, 'set_result')) {
+            $form->set_result([
+                'type' => 'success',
+                'message' => $webhook_config['success_message'],
+            ]);
+        }
     }
 }
+
+// Additional hook for testing - log all Bricks hooks
+add_action('init', function() {
+    $debug_mode = get_option('bf2w_debug_mode', false);
+    if (!$debug_mode) return;
+    
+    // Add debugging for all bricks hooks
+    add_action('all', function($hook) {
+        if (strpos($hook, 'bricks') !== false && strpos($hook, 'form') !== false) {
+            bf2w_log("Bricks hook fired: " . $hook);
+        }
+    });
+});
 
 // Display debug info
 function bf2w_display_debug_info() {
