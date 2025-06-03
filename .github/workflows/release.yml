@@ -91,4 +91,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Output Release URL
-        run: echo "New release created: ${{ steps.create_release.outputs.url }}" 
+        run: |
+          echo "New release created: ${{ steps.create_release.outputs.url }}" 
